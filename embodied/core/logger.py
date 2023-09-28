@@ -11,8 +11,6 @@ import rich.console
 import wandb
 from subprocess import Popen, PIPE
 import torch
-import tensorflow as tf
-import tensorflow.compat.v1 as tf1
 
 from . import path
 

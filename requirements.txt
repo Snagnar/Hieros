@@ -1,38 +1,24 @@
-cloudpickle
-crafter
-# gym==0.23.0
-gym==0.19.0
-jax
-jaxlib
-numpy
-optax
-rich
-ruamel.yaml
+cloudpickle==1.6.0
+crafter==1.8.1
+gym==0.23.0
+# gym==0.19.0
+jax==0.4.16
+jaxlib==0.4.16
+numpy==1.26.0
+optax==0.1.7
+rich==13.5.3
+ruamel.yaml==0.17.33
 atari-py==0.2.9
-dm-sonnet
-opencv-python
-rich
-# tensorflow<=2.9.2
-# tensorflow_probability
-black
-wandb
-lovely-tensors
-# x-transformers
-ruamel.yaml
-lovely-numpy
-tensorboard
-zmq
-einops
-
+dm-sonnet==2.0.1
+opencv-python==4.8.1.78
+black==23.9.1
+wandb==0.15.11
+lovely-tensors==0.1.15
+lovely-numpy==0.2.9
+tensorboard==2.14.1
+zmq==0.0.
+einops==0.6.1
 torch>=2.0.0
-# torchvision==0.15.1
-# numpy==1.20.1
-# tensorboard==2.5.0
-# pandas==1.2.4
-# matplotlib==3.4.1
-# ruamel.yaml==0.17.4
-# moviepy==1.0.3
-# protobuf==3.20.0
-# dm_control==1.0.9
-tqdm
-moviepy
+tqdm==4.66.1
+moviepy==1.0.3
+dm_control==1.0.14

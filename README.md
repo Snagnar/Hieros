@@ -1,5 +1,5 @@
 # Hieros
-Implemenation of the HIERarchical imagionation On Structured State Space Sequence Models (HIEROS) paper.
+Implemenation of the HIERarchical imagionation On Structured State Space Sequence Models (HIEROS) paper in pytorch. This repository is based on the [DreamerV3](https://github.com/danijar/dreamerv3), [DreamerV3 in pytorch](https://github.com/NM512/dreamerv3-torch) and [S5 in pytorch](https://github.com/i404788/s5-pytorch) repositories.
 
 # Installation
 
@@ -39,7 +39,18 @@ All flags available in `hieros/config.yml` are configurable as command line argu
 python hieros/train.py --configs atari100k --task=atari_alien --max_hierarchy=2
 ```
 
+We also include an implementation of the original [DreamerV3](https://github.com/NM512/dreamerv3-torch) model, which is accessible with `--model_name=dreamer`.
+
 The metrics are logged to tensorboard by default. To visualize the training progress, run:
 ```
 tensorboard --logdir=logs
 ```
+
+# Repository
+
+The repository is structured as follows:
+- `hieros/` contains the implementation and training code of the HIEROS model.
+- `embodied/` contains the implementation of some basic tools like logging, replay buffers, environments, etc. This is largely copied from [here](https://github.com/danijar/dreamerv3)
+- `resettable_s5/` contains our implementation of the resettable S5 model used for the S5WM. This is based on the [pytorch s5 implementation](https://github.com/i404788/s5-pytorch)
+- `experiments/` contains wandb sweep configurations for the experiments in the paper.
+- `sampler_visualization.py` contains code to visualize the sampling methods used in the paper (ETBS and the standard uniform sampling).
