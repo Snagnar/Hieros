@@ -1,0 +1,77 @@
+command:
+  - ${env}
+  - ${interpreter}
+  - ${program}
+  - --configs
+  - atari100k
+  - s5_no_mlp
+  - s5_silu_act
+  - small_model_size
+  # - hierarchy_decrease
+  - additional_inputs
+  - --max_hierarchy
+  - "3"
+  - --subgoal_visualization
+  - "True"
+  - --wandb_logging
+  - "True"
+  - --dynamics_model
+  - s5
+  - --novelty_reward_weight
+  - 0.1
+  - --use_subgoal
+  - True
+  - --decompress_subgoal_for_input
+  - False
+  - --subactor_update_every
+  - 4
+  - --subactor_train_every
+  - 4
+  - --subgoal_reward_weight
+  - 0.3
+  - --novelty_only_higher_level
+  - True
+  - --subactor_encode_intermediate
+  - False
+  - --replay_temperature
+  - 0.3
+  - --wandb_prefix
+  - "no_intermediate_encoding"
+  - ${args}
+method: grid
+metric:
+  goal: maximize
+  name: episode/score
+project: hieros
+name: full_atari100k_sweep_no_intermediate_encoding
+parameters:
+  task:
+    values: [
+      # "atari_alien",
+      # "atari_amidar",
+      # "atari_assault",
+      # "atari_asterix",
+      # "atari_bank_heist",
+      "atari_battle_zone",
+      # "atari_boxing",
+      "atari_breakout",
+      # "atari_chopper_command",
+      # "atari_crazy_climber",
+      # "atari_demon_attack",
+      "atari_freeway",
+      # "atari_frostbite",
+      # "atari_gopher",
+      # "atari_hero",
+      # "atari_jamesbond",
+      # "atari_kangaroo",
+      "atari_krull",
+      # "atari_kung_fu_master",
+      # "atari_ms_pacman",
+      # "atari_pong",
+      # "atari_private_eye",
+      # "atari_qbert",
+      # "atari_road_runner",
+      # "atari_seaquest",
+    ]
+  
+program: hieros_s4/train.py

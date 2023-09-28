@@ -1,0 +1,474 @@
+defaults:
+
+  model_name: "hieros"
+  logdir: null
+  traindir: null
+  evaldir: null
+  offline_traindir: ''
+  offline_evaldir: ''
+  train_fill: 0
+  seed: 42
+  steps: 1e6
+  eval_every: 1e4
+  eval_eps: 10
+  eval_initial: False
+  # eval_initial: True
+  eval_fill: 100
+  sync_every: 1e4
+  save_every: 1e5
+  log_every: 1e3
+  subgoal_cache_size: 200
+  reset_every: 0
+  device: 'cuda:0'
+  compile: False
+  precision: 32
+  debug: False
+  expl_gifs: False
+  video_pred_log: True
+
+
+  hierarchical_world_models: True
+  # hierarchical_world_models: False
+  higher_level_wm: true
+  only_subgoal_reward: false
+  extrinsic_reward_weight: 1.0
+  subgoal_reward_weight: 0.1
+  novelty_reward_weight: 0.1
+  novelty_reward_symlog: True
+  subgoal_reward_symlog: True
+  symlog_subactor_obs: True
+  # symlog_novelty_reward: true
+  novelty_only_higher_level: false
+  add_hierarchy_every: 1
+  use_subgoal: true
+  max_hierarchy: 3
+  subgoal_visualization: True
+  subactor_update_every: 4
+  subactor_train_every: 4
+  decompress_subgoal_for_input: False
+  subgoal_shape: [8, 8]
+  subgoal_autoencoder_imag_training: True
+  subgoal_compression: {"layers": 3, "encoding_symlog": True, "decoding_symlog": False, "kl_scale": 0.5, "lr": 1e-4, "opt_eps": 1e-6, "grad_clip": 100.0, "weight_decay": 0, "act": "GELU", "norm": "LayerNorm"}
+  hierarchy_decrease_sizes: {enabled: False, sizes: ["dyn_hidden", "dyn_deter", "units"], factor: 2.0, min: 32}
+  prefetch_batches: 1
+  subactor_encoding_architecture: "mlp"
+  subactor_encode_intermediate: True
+  subgoal:
+    use_stoch: false
+    use_deter: true
+  fix_dataset: false
+  s5:
+    model_dim: 256
+    state_dim: 128
+    init_blocks: 4
+    bidirectional: False
+    double_arch: True
+    ff_layers: 0
+    ff_act: SiLU
+    ff_dropout: 0.1
+    attn_dropout: 0.1
+    attn_act: SiLU
+    attn_linear: True
+    num_blocks: 4
+    resettable: True
+    norm: LayerNorm
+    state_as_deter: True
+    squash_output: False
+    squash_final_output: False
+    symlog_final_output: True
+    context_fraction: 0.0
+
+  # Environment
+  task: 'dmc_walker_walk'
+  size: [64, 64]
+  action_repeat: 2
+  time_limit: 0
+  grayscale: False
+  prefill: 0
+  enable_prefill: false
+  eval_noise: 0.0
+  reward_EMA: True
+  from_checkpoint: ''
+  log_zeros: False
+  log_keys_video: [image]
+  log_keys_sum: '^$'
+  log_keys_mean: '(log_entropy)'
+  log_keys_max: '^$'
+  wandb_name: null
+  wandb_prefix: null
+  wandb_logging: false
+  tensorboard_logging: true
+  autoregressive_evalution: false
+  store_checkpoints: false
+
+  data_loaders: 8
+
+  replay: efficienttimebalanced
+  # replay: timebalancednaive
+  # replay: uniform
+  replay_temperature: 0.3
+  replay_size: 1e6
+  replay_online: False
+  
+
+  envs: {amount: 4, parallel: process, length: 0, reset: True, restart: True, discretize: 0, checks: False}
+  wrapper: {length: 0, reset: True, discretize: 0, checks: False}
+  env:
+    atari: {size: [64, 64], repeat: 4, sticky: True, gray: False, actions: all, lives: unused, noops: 0, resize: opencv}
+    dmlab: {size: [64, 64], repeat: 4, episodic: True}
+    minecraft: {size: [64, 64], break_speed: 100.0}
+    dmc: {size: [64, 64], repeat: 2, camera: -1}
+    loconav: {size: [64, 64], repeat: 2, camera: -1}
+
+
+  # Model
+  dynamics_model: "s5"
+  # dynamics_model: "rssm"
+  dyn_cell: 'gru_layer_norm'
+  dyn_hidden: 256
+  dyn_deter: 256
+  dyn_stoch: 32
+  dyn_discrete: 32
+  dyn_input_layers: 1
+  dyn_output_layers: 1
+  dyn_rec_depth: 1
+  dyn_shared: False
+  dyn_loss_clip: True
+  dyn_mean_act: 'none'
+  dyn_std_act: 'sigmoid2'
+  dyn_min_std: 0.1
+  dyn_stochasticity: true
+  dyn_temp_post: True
+
+
+  # additional inputs for the actor network
+  reward_actor_input: True
+  cont_actor_input: True
+  stochasticity_actor_input: True
+  additional_features_symlog: True
+
+
+  grad_heads: ['decoder', 'reward', 'cont']
+  units: 256
+  reward_layers: 2
+  cont_layers: 2
+  value_layers: 2
+  actor_layers: 2
+  act: 'SiLU'
+  norm: 'LayerNorm'
+  encoder:
+    {mlp_keys: '$^', cnn_keys: 'image', act: 'SiLU', norm: 'LayerNorm', cnn_depth: 24, kernel_size: 4, minres: 4, mlp_layers: 2, mlp_units: 512, symlog_inputs: True}
+  decoder:
+    {mlp_keys: '$^', cnn_keys: 'image', act: 'SiLU', norm: 'LayerNorm', cnn_depth: 24, kernel_size: 4, minres: 4, mlp_layers: 2, mlp_units: 512, cnn_sigmoid: False, image_dist: mse, vector_dist: symlog_mse}
+  value_head: 'symlog_disc'
+  reward_head: 'symlog_disc'
+  dyn_scale: '0.5'
+  rep_scale: '0.1'
+  kl_free: '1.0'
+  cont_scale: 1.0
+  reward_scale: 1.0
+  weight_decay: 0.00
+  unimix_ratio: 0.01
+  action_unimix_ratio: 0.01
+  initial: 'learned'
+
+  # Training
+  batch_size: 16
+  batch_length: 64
+  train_ratio: 512
+  pretrain: 0
+  model_lr: 1e-4
+  opt_eps: 1e-8
+  grad_clip: 1000
+  value_lr: 3e-5
+  actor_lr: 3e-5
+  ac_opt_eps: 1e-5
+  value_grad_clip: 100
+  actor_grad_clip: 100
+
+  dataset_size: 1000000
+  slow_value_target: True
+  slow_target_update: 1
+  slow_target_fraction: 0.02
+  opt: 'adamw'
+  lr_scheduler: null
+  warmup_steps: 1000
+
+  filter: '.*'
+  # Behavior.
+  discount: 0.997
+  discount_lambda: 0.95
+  imag_horizon: 16
+  imag_gradient: 'dynamics'
+  imag_gradient_mix: '0.0'
+  imag_sample: True
+  actor_dist: 'normal'
+  actor_entropy: '3e-4'
+  actor_state_entropy: 0.0
+  actor_init_std: 1.0
+  actor_min_std: 0.1
+  actor_max_std: 1.0
+  actor_temp: 0.1
+  expl_amount: 0.0
+  eval_state_mean: False
+  collect_dyn_sample: True
+  behavior_stop_grad: True
+  value_decay: 0.0
+  future_entropy: False
+
+  # Exploration
+  expl_behavior: 'greedy'
+  expl_until: 0
+  expl_extr_scale: 0.0
+  expl_intr_scale: 1.0
+  disag_target: 'stoch'
+  disag_log: True
+  disag_models: 10
+  disag_offset: 1
+  disag_layers: 4
+  disag_units: 400
+  disag_action_cond: False
+
+dmc_vision:
+  steps: 1e6
+  train_ratio: 512
+  video_pred_log: true
+  imag_gradient: 'dynamics'
+  encoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+
+dmc_proprio:
+  steps: 5e5
+  train_ratio: 512
+  video_pred_log: false
+  imag_gradient: 'dynamics'
+  encoder: {mlp_keys: '.*', cnn_keys: '$^'}
+  decoder: {mlp_keys: '.*', cnn_keys: '$^'}
+
+bsuite:
+    train_ratio: 1024
+    actor_dist: 'onehot'
+    imag_gradient: 'reinforce'
+    # encoder: {mlp_keys: '.*', cnn_keys: 'observation'}
+    # decoder: {mlp_keys: '.*', cnn_keys: 'observation'}
+    encoder: {mlp_keys: '.*', cnn_keys: '$^'}
+    decoder: {mlp_keys: '.*', cnn_keys: '$^'}
+
+atari100k:
+  steps: 4e5
+  envs:
+    amount: 1
+  env:
+    atari: {gray: False, repeat: 4, sticky: False, noops: 30, actions: needed}
+  action_repeat: 4
+  eval_eps: 100
+  stickey: False
+  eval_every: 2e5
+  lives: unused
+  noops: 30
+  resize: opencv
+  actions: needed
+  actor_dist: 'onehot'
+  train_ratio: 1024
+  imag_gradient: 'reinforce'
+  time_limit: 54000
+
+
+debug:
+  debug: True
+  envs:
+    amount: 1
+  eval_eps: 5
+  eval_every: 100
+  log_every: 5e1
+
+  add_hierarchy_every: 1
+  max_hierarchy: 3
+  batch_size: 7
+  batch_length: 9
+  train_ratio: 32
+  time_limit: 100
+
+
+hierarchy_decrease:
+  subgoal_visualization: False
+  hierarchy_decrease_sizes: {enabled: True, sizes: ["dyn_hidden", "dyn_deter", "units"], factor: 2.0, min: 8}
+
+no_hierarchy_decrease:
+  subgoal_visualization: False
+  hierarchy_decrease_sizes: {enabled: False, sizes: ["dyn_hidden", "dyn_deter", "units"], factor: 2.0, min: 8}
+
+small_model_size_old:
+  dyn_hidden: 128
+  dyn_deter: 128
+  dyn_stoch: 16
+  dyn_discrete: 16
+  units: 128
+  s5:
+    model_dim: 128
+    state_dim: 64
+  subgoal_compression:
+    layers: 2
+
+small_model_size:
+  dyn_hidden: 256
+  dyn_deter: 256
+  encoder:
+    cnn_depth: 24
+  decoder:
+    cnn_depth: 24
+  units: 256
+  s5:
+    model_dim: 256
+    state_dim: 128
+    num_blocks: 4
+  subgoal_compression:
+    layers: 3
+
+
+medium_smol_model_size:
+  dyn_hidden: 256
+  dyn_deter: 256
+  dyn_stoch: 32
+  dyn_discrete: 32
+  units: 256
+  s5:
+    model_dim: 128
+    state_dim: 128
+  subgoal_compression:
+    layers: 4
+
+medium_smol_model_size2:
+  dyn_hidden: 256
+  dyn_deter: 256
+  dyn_stoch: 32
+  dyn_discrete: 32
+  units: 256
+  s5:
+    model_dim: 128
+    state_dim: 128
+  subgoal_compression:
+    layers: 3
+
+medium_model_size:
+  dyn_hidden: 384
+  dyn_deter: 384
+  dyn_stoch: 32
+  dyn_discrete: 32
+  units: 384
+  s5:
+    model_dim: 256
+    state_dim: 128
+  subgoal_compression:
+    layers: 3
+
+subgoal_2x2:
+  use_subgoal: True
+  subgoal_shape: [2, 2]
+
+subgoal_3x3:
+  use_subgoal: True
+  subgoal_shape: [3, 3]
+
+subgoal_4x4:
+  use_subgoal: True
+  subgoal_shape: [4, 4]
+
+subgoal_6x6:
+  use_subgoal: True
+  subgoal_shape: [6, 6]
+
+subgoal_8x8:
+  use_subgoal: True
+  subgoal_shape: [8, 8]
+
+s5_dynamics_state_deter:
+  dynamics_model: "s5"
+  s5:
+    state_as_deter: True
+
+s5_dynamics_no_state_deter:
+  dynamics_model: "s5"
+  s5:
+    state_as_deter: False
+
+
+s5_no_loss_clip:
+  dynamics_model: "s5"
+  dyn_loss_clip: False
+  dyn_scale: '0.5'
+  rep_scale: '0.1'
+
+s5_loss_clip:
+  dynamics_model: "s5"
+  dyn_loss_clip: True
+  dyn_scale: '0.5'
+  rep_scale: '0.1'
+
+s5_no_dropout:
+  dynamics_model: "s5"
+  s5:
+    ff_dropout: 0.0
+    attn_dropout: 0.0
+
+s5_no_linear:
+  dynamics_model: "s5"
+  s5:
+    attn_linear: False
+
+s5_silu_act:
+  dynamics_model: "s5"
+  s5:
+    attn_act: 'SiLU'
+    ff_act: 'SiLU'
+
+s5_no_mlp:
+  dynamics_model: "s5"
+  s5:
+    ff_layers: 0
+  
+s5_single_arch:
+  dynamics_model: "s5"
+  s5:
+    double_arch: False
+
+s5_more_layers:
+  dynamics_model: "s5"
+  s5:
+    num_blocks: 8
+
+s5_less_layers:
+  dynamics_model: "s5"
+  s5:
+    num_blocks: 2
+
+s5_one_layer:
+  dynamics_model: "s5"
+  s5:
+    num_blocks: 1
+
+s5_squash_output:
+  dynamics_model: "s5"
+  s5:
+    squash_output: True
+
+s5_squash_final_output:
+  dynamics_model: "s5"
+  s5:
+    squash_final_output: True
+  
+s5_smol_model_dim:
+  dynamics_model: "s5"
+  s5:
+    model_dim: 128
+
+additional_inputs:
+  reward_actor_input: True
+  cont_actor_input: true
+  stochasticity_actor_input: True
+  additional_features_symlog: True
+
+s5_smol_dynamics:
+  s5:
+    model_dim: 128
+    state_dim: 64
