@@ -72,4 +72,4 @@ parameters:
       # "atari_seaquest",
     ]
   
-program: hieros_s4/train.py
+program: hieros/train.py
