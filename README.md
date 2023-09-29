@@ -45,6 +45,7 @@ The metrics are logged to tensorboard by default. To visualize the training prog
 ```
 tensorboard --logdir=logs
 ```
+With these training statistics, you can also reproduce the plots in the paper.
 
 # Repository
 
