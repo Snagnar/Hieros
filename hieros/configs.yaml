@@ -32,7 +32,7 @@ defaults:
   higher_level_wm: true
   only_subgoal_reward: false
   extrinsic_reward_weight: 1.0
-  subgoal_reward_weight: 0.1
+  subgoal_reward_weight: 0.3
   novelty_reward_weight: 0.1
   novelty_reward_symlog: True
   subgoal_reward_symlog: True
