@@ -1002,7 +1002,7 @@ class SubActor(nn.Module):
         with timer:
             if self._config.subgoal_autoencoder_imag_training:
                 mets = self.subgoal_autoencoder._train(
-                    self.get_subgoal(train_result[1])
+                    self.get_subgoal(train_result[1]).detach()
                 )
             else:
                 mets = self.subgoal_autoencoder._train(self.get_subgoal(start))

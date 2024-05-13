@@ -103,9 +103,9 @@ defaults:
 
   data_loaders: 8
 
-  replay: efficienttimebalanced
+  # replay: efficienttimebalanced
   # replay: timebalancednaive
-  # replay: uniform
+  replay: uniform
   replay_temperature: 0.3
   replay_size: 1e6
   replay_online: False
@@ -233,7 +233,7 @@ dmc_vision:
   steps: 1e6
   train_ratio: 512
   video_pred_log: true
-  imag_gradient: 'dynamics'
+  imag_gradient: 'reinforce'
   encoder: {mlp_keys: '$^', cnn_keys: 'image'}
   decoder: {mlp_keys: '$^', cnn_keys: 'image'}
 
