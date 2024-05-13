@@ -157,9 +157,9 @@ defaults:
   act: 'SiLU'
   norm: 'LayerNorm'
   encoder:
-    {mlp_keys: '$^', cnn_keys: 'image', act: 'SiLU', norm: 'LayerNorm', cnn_depth: 24, kernel_size: 4, minres: 4, mlp_layers: 2, mlp_units: 512, symlog_inputs: True}
+    {mlp_keys: '$^', cnn_keys: 'image', act: 'SiLU', norm: 'LayerNorm', cnn_depth: 24, kernel_size: 4, minres: 4, mlp_layers: 2, mlp_units: 1024, symlog_inputs: True}
   decoder:
-    {mlp_keys: '$^', cnn_keys: 'image', act: 'SiLU', norm: 'LayerNorm', cnn_depth: 24, kernel_size: 4, minres: 4, mlp_layers: 2, mlp_units: 512, cnn_sigmoid: False, image_dist: mse, vector_dist: symlog_mse}
+    {mlp_keys: '$^', cnn_keys: 'image', act: 'SiLU', norm: 'LayerNorm', cnn_depth: 24, kernel_size: 4, minres: 4, mlp_layers: 2, mlp_units: 1024, cnn_sigmoid: False, image_dist: mse, vector_dist: symlog_mse}
   value_head: 'symlog_disc'
   reward_head: 'symlog_disc'
   dyn_scale: '0.5'
@@ -355,12 +355,12 @@ medium_model_size:
   dyn_deter: 384
   dyn_stoch: 32
   dyn_discrete: 32
-  units: 384
+  units: 512
   s5:
     model_dim: 256
     state_dim: 128
   subgoal_compression:
-    layers: 3
+    layers: 4
 
 subgoal_2x2:
   use_subgoal: True
