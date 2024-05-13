@@ -97,7 +97,7 @@ defaults:
   wandb_name: null
   wandb_prefix: null
   wandb_logging: false
-  tensorboard_logging: true
+  tensorboard_logging: false
   autoregressive_evalution: false
   store_checkpoints: false
 
