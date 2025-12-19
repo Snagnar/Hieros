@@ -106,7 +106,7 @@ def train_eval(agent, train_env, eval_env, train_replay, eval_replay, logger, ar
         train_iterations = should_train(step)
         # print("train_step", train_iterations)
         for _ in (
-            tqdm(train_iterations) if train_iterations > 20 else range(train_iterations)
+            tqdm(range(train_iterations)) if train_iterations > 20 else range(train_iterations)
         ):
             if dataset_train is not None:
                 with timer.scope("dataset_train"):
